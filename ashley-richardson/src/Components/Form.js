@@ -14,7 +14,7 @@ function Form() {
 
     //Various States
     const [formData, setFormData] = useState(defaultState);
-    const [errorState, setErorState] = useState({...defaultState, terms: ''});
+    const [errorState, setErrorState] = useState({...defaultState, terms: ''});
     const [buttonDisabled, setButtonDisabled] = useState(true);
     const [addUserList, setAddUserList] = useState([]);
 
@@ -57,13 +57,14 @@ function Form() {
     const validateChange = e => {
         yup.reach(formSchema, e.target.name)
         .validate(e.target.value)
-        .then(valid => {
+        .then( valid =>{
             setErrorState({
                 ...errorState,
                 [e.target.name]: ''
             });
         })
         .catch(err=>{
+            console.log(err.errors);
             setErrorState({
                 ...errorState,
                 [e.target.name]: err.errors[0]
@@ -82,5 +83,19 @@ function Form() {
         validateChange(e);
     };
 
-    
+    return (
+        <form onSubmit={submitForm}>
+            <Input 
+                type='text'
+                name='name'
+                onChange={inputChange}
+                value={formData.name}
+                label='name'
+                errors={errorState}
+            />
+
+        </form>
+    )
 }
+
+export default Form;
