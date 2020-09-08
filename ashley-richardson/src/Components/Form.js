@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import Input from './Input';
+import Input from "./Input";
 import * as yup from 'yup';
 import axios from 'axios';
 
@@ -8,7 +8,7 @@ function Form() {
     const defaultState = {
         name: '',
         email: '',
-        password: '',
+        userPassword: '',
         terms: false
     };
 
@@ -25,10 +25,9 @@ function Form() {
             .string()
             .required("Enter your email please.")
             .email("Not a valid email."),
-        password: yup
+        userPassword: yup
             .string()
-            .required("Please enter password")
-            .password("Ehh try again"),
+            .required("Please enter password"),
         terms: yup
             .boolean()
             .oneOf([false], "Please agree to terms and conditions")
@@ -93,6 +92,15 @@ function Form() {
                 label='name'
                 errors={errorState}
             />
+            <Input 
+            type='email'
+            name='email'
+            onChange={inputChange}
+            value={formData.email}
+            label='email'
+            errors={errorState}
+            />
+
 
         </form>
     )
