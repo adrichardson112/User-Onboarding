@@ -100,10 +100,21 @@ function Form() {
             label='email'
             errors={errorState}
             />
-
-
+            <Input
+            type='password'
+            name='userPassword'
+            onChange={inputChange}
+            value={formData.userPassword}
+            label='userPassword'
+            errors={errorState}
+            />
+            <label className='terms' htmlFor='terms'>
+                <input name='terms' type='checkbox' onChange={inputChange} />
+                Terms and Conditions!
+            </label>
+            <button disabled={buttonDisabled}>Submit Here!</button>
         </form>
-    )
+    );
 }
 
 export default Form;
