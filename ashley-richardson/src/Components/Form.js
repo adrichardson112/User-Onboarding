@@ -56,7 +56,7 @@ function Form() {
     const validateChange = e => {
         yup.reach(formSchema, e.target.name)
         .validate(e.target.value)
-        .then( valid =>{
+        .then(valid =>{
             setErrorState({
                 ...errorState,
                 [e.target.name]: ''
@@ -108,10 +108,14 @@ function Form() {
             label='userPassword'
             errors={errorState}
             />
-            <label className='terms' htmlFor='terms'>
-                <input name='terms' type='checkbox' onChange={inputChange} />
-                Terms and Conditions!
-            </label>
+            <label htmlFor='terms'>Please Agree to Terms and Conditions</label>
+                <input
+                    id='terms'
+                    type='checkbox'
+                    name='terms'
+                    checked={formData.terms}
+                    onChange={inputChange}
+                />
             <button disabled={buttonDisabled}>Submit Here!</button>
         </form>
     );
