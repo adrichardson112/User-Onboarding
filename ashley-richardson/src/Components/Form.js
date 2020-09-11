@@ -95,6 +95,7 @@ function Form() {
             errors={errorState}
             />
             <Input
+            data-cy="passwordfield"
             type='password'
             name='userPassword'
             onChange={inputChange}
@@ -104,6 +105,7 @@ function Form() {
             />
             <label htmlFor='terms'>Please Agree to Terms and Conditions</label>
                 <input
+                    data-cy="termsfield"
                     id='terms'
                     type='checkbox'
                     name='terms'
