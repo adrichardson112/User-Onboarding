@@ -54,21 +54,13 @@ function Form() {
 
     //does yup validation equal schema
     const validateChange = e => {
-        yup.reach(formSchema, e.target.name)
-        .validate(e.target.value)
-        .then(valid =>{
+        e.persist();
+        if(e.target.value.length === 0) {
             setErrorState({
                 ...errorState,
-                [e.target.name]: ''
+                [e.target.name]: `${e.target.name} field is required` 
             });
-        })
-        .catch(err=>{
-            console.log(err.errors);
-            setErrorState({
-                ...errorState,
-                [e.target.name]: err.errors[0]
-            });
-        });
+        }
     };
 
     //handling change within the form
@@ -85,6 +77,7 @@ function Form() {
     return (
         <form onSubmit={submitForm}>
             <Input 
+                data-cy="namefield"
                 type='text'
                 name='name'
                 onChange={inputChange}
@@ -93,6 +86,7 @@ function Form() {
                 errors={errorState}
             />
             <Input 
+            data-cy="emailfield"
             type='email'
             name='email'
             onChange={inputChange}
