@@ -1,0 +1,120 @@
+import React, { useState, useEffect } from 'react';
+import Input from "./Input";
+import * as yup from 'yup';
+import axios from 'axios';
+
+function Form() {
+    //State for form
+    const defaultState = {
+        name: '',
+        email: '',
+        userPassword: '',
+        terms: false
+    };
+
+    //Various States
+    const [formData, setFormData] = useState(defaultState);
+    const [errorState, setErrorState] = useState({...defaultState, terms: ''});
+    const [buttonDisabled, setButtonDisabled] = useState(true);
+    const [addUserList, setAddUserList] = useState([]);
+
+    //formstate Schema
+    const formSchema = yup.object().shape({
+        name: yup.string().required("Enter name please."),
+        email: yup
+            .string()
+            .required("Enter your email please.")
+            .email("Not a valid email."),
+        userPassword: yup
+            .string()
+            .required("Please enter password"),
+        terms: yup
+            .boolean()
+            .oneOf([false], "Please agree to terms and conditions")
+    });
+
+    //effect
+    useEffect(() => {
+        if (formData.terms) {
+            setButtonDisabled(!formData.terms);
+        }
+    }, [formData]);
+
+    //onSubmit function
+    const submitForm = e => {
+        e.preventDefault();
+        console.log("form submitted!");
+        axios 
+            .post("https://reqres.in/api/users", formData)
+            .then(resp=> {
+                setAddUserList(addUserList.concat(resp.data));
+            })
+            .catch(err=>console.log(err));
+    };
+
+    //does yup validation equal schema
+    const validateChange = e => {
+        e.persist();
+        if(e.target.value.length === 0) {
+            setErrorState({
+                ...errorState,
+                [e.target.name]: `${e.target.name} field is required` 
+            });
+        }
+    };
+
+    //handling change within the form
+    const inputChange = e => {
+        //determine the form value
+        const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
+        setFormData({
+            ...formData,
+            [e.target.name]: value
+        });
+        validateChange(e);
+    };
+
+    return (
+        <form onSubmit={submitForm}>
+            <Input 
+                data-cy="namefield"
+                type='text'
+                name='name'
+                onChange={inputChange}
+                value={formData.name}
+                label='name'
+                errors={errorState}
+            />
+            <Input 
+            data-cy="emailfield"
+            type='email'
+            name='email'
+            onChange={inputChange}
+            value={formData.email}
+            label='email'
+            errors={errorState}
+            />
+            <Input
+            data-cy="passwordfield"
+            type='password'
+            name='userPassword'
+            onChange={inputChange}
+            value={formData.userPassword}
+            label='userPassword'
+            errors={errorState}
+            />
+            <label htmlFor='terms'>Please Agree to Terms and Conditions</label>
+                <input
+                    data-cy="termsfield"
+                    id='terms'
+                    type='checkbox'
+                    name='terms'
+                    checked={formData.terms}
+                    onChange={inputChange}
+                />
+            <button disabled={buttonDisabled}>Submit Here!</button>
+        </form>
+    );
+}
+
+export default Form;
